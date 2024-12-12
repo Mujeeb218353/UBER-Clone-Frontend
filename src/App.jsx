@@ -1,8 +1,13 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
+import ThemeChanger from './components/ThemeChanger.jsx'
 
 const App = () => {
   return (
-   <div className='bg-zinc-900 min-h-screen w-full h-screen'>f</div>
+   <div className='min-h-screen w-full h-screen'>
+     <Outlet/>
+     <ThemeChanger position='fixed bottom-4 right-4'/>
+   </div>
   )
 }
 
