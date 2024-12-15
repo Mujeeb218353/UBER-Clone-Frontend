@@ -1,82 +1,68 @@
-import React, { useRef } from "react";
+import React, { useRef, lazy } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Link } from "react-router-dom";
+import uberLogo from  '../assets/uber-logo.png';
 
 const Home = () => {
   const { contextSafe } = useGSAP();
+  const imgRef = useRef();
   const carRef = useRef();
   const h1Ref = useRef();
-  const tagLineRef = useRef();
+  const h2Ref = useRef();
   const btnRef = useRef();
-  const h1Text = "Let's Ride"
-  const tagLineText = [
-    "Revolutionizing", 
-    " ", 
-    "Mobility", 
-    " ", 
-    "with", 
-    " ", 
-    "Seamless", 
-    " ", 
-    "Rides", 
-    ".", 
-    " ", 
-    "Get", 
-    " ", 
-    "Ready", 
-    " ", 
-    "to", 
-    " ", 
-    "Experience", 
-    " ", 
-    "the", 
-    " ", 
-    "Future", 
-    " ", 
-    "of", 
-    " ", 
-    "Transportation",
+  const h1Text = "Welcome to UBER";
+  const h2Text = [
+    "Getting",
+    " ",
+    "Started",
     " ",
     "with",
     " ",
-    "UBER", 
-    "."
+    "Uber"
   ]
 
   useGSAP(() => {
 
-      const tl = gsap.timeline()  
+      const tl = gsap.timeline() 
+
+      tl.from(imgRef.current, {
+        opacity: 0,
+        duration: 2,
+        width: "3rem"
+      })
+      
+      tl.from(h1Ref.current.children, {
+        y: 100,
+        opacity: 0,
+        duration: 2,
+        ease: "elastic.out(0.7,0.2)",
+        stagger: 0.02
+      })
 
       tl.to(carRef.current, {
+        onStart: ()=>{
+          carRef.current.style.opacity = "1";
+        },
         fontSize: "8rem",
         duration: 2,
         ease: "elastic.out(0.7,0.2)",
-        delay: 0.3
       })
 
-      tl.from(h1Ref.current.children,{
-        x: 100,
+      tl.from(h2Ref.current.children,{ 
+        y: 100,
         opacity: 0,
-        duration: .5,
+        duration: 1,
+        ease: "elastic.out(0.7,0.2)",
         stagger: {
           each: 0.02,
           from: "start"
         },
       })
 
-      tl.from(tagLineRef.current.children,{
-        y: 100,
-        opacity: 0,
-        duration: .5,
-        stagger: {
-          each: 0.01,
-          from: "start"
-        },
-      })
-
       tl.to(btnRef.current, {
         opacity: 1,
-        duration: 0.8,
+        duration: 1,
         paddingLeft: window.innerWidth < 768 ? "5rem" : "7rem",
         paddingRight: window.innerWidth < 768 ? "5rem" : "7rem",
       })
@@ -85,27 +71,34 @@ const Home = () => {
 
   return (
     <div className="w-full md:w-[60%] lg:w-[40%] xl:w-[30%] h-full min-h-screen flex justify-center items-center flex-col overflow-hidden">
-      <div className="flex flex-col justify-center items-center gap-5">
-        <i className="ri-roadster-fill drop-shadow-2xl" ref={carRef}></i>
-        <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold" ref={h1Ref}>
-          {
-            h1Text.split("").map((char, id) => {
-              return <span key={id} className="inline-block">{char === " " ? <>&nbsp;</> : char}</span>
-            })
-          }
+      <div className="w-full flex justify-center items-center flex-col gap-8">
+        <img 
+          ref={imgRef}
+          src={uberLogo}
+          className="max-w-80"
+          alt="Uber Logo" 
+          loading="lazy" 
+          />
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold" ref={h1Ref}>
+            {
+              h1Text && h1Text.split("").map((char, id) => {
+                return <span key={id} className="inline-block">{char === " " ? <>&nbsp;</> : char}</span>
+              })
+            }
           </h1>
-        <p className="text-[1rem] md:text-lg lg:text-xl text-center font-[500]" ref={tagLineRef}>
+      </div>
+      <div className="flex flex-col justify-center items-center gap-10">
+        <i className="ri-roadster-fill drop-shadow-2xl opacity-0" ref={carRef}></i>
+        <h2 className="flex flex-wrap justify-center items-center gap-y-4" ref={h2Ref}>
           {
-            tagLineText.map((arrEle, id) => {
-              return <span key={id} className="inline-block">{arrEle === " " ? <>&nbsp;</> : arrEle === "UBER" ? <b className="text-[1rem] md:text-lg lg:text-xl">UBER</b> : arrEle}</span>
+            h2Text && h2Text.map((arrElement, id) => {
+              return <span key={id} className="inline-block text-xl md:text-2xl lg:text-3xl font-bold text-center">{arrElement === " " ? <>&nbsp;</> : arrElement}</span>
             })
           }
-        </p>
-        <button className="btn btn-neutral rounded-3xl opacity-0 shadow-2xl" ref={btnRef}>
+          </h2>
+        <Link to="/login" className="btn btn-neutral rounded-3xl opacity-0 shadow-2xl" ref={btnRef}>
           Get Started
-        </button>
-      </div>
-      <div className="">
+        </Link>
       </div>
     </div>
   );
