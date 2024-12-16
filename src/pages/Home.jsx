@@ -1,8 +1,8 @@
-import React, { useRef, lazy } from "react";
+import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Link } from "react-router-dom";
-import uberLogo from  '../assets/uber-logo.png';
+import uberLogo from  '../assets/uber-logo.png'; 
 
 const Home = () => {
   const { contextSafe } = useGSAP();
@@ -11,7 +11,7 @@ const Home = () => {
   const h1Ref = useRef();
   const h2Ref = useRef();
   const btnRef = useRef();
-  const h1Text = "Welcome to UBER";
+  const h1Text = "UBER";
   const h2Text = [
     "Getting",
     " ",
@@ -75,7 +75,7 @@ const Home = () => {
         <img 
           ref={imgRef}
           src={uberLogo}
-          className="max-w-80"
+          className="max-w-60"
           alt="Uber Logo" 
           loading="lazy" 
           />
@@ -97,7 +97,8 @@ const Home = () => {
           }
           </h2>
         <Link to="/login" className="btn btn-neutral rounded-3xl opacity-0 shadow-2xl" ref={btnRef}>
-          Get Started
+          Continue
+          <i class="ri-arrow-right-line"></i>
         </Link>
       </div>
     </div>

@@ -1,16 +1,16 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, StrictMode, Suspense } from "react";
-import 'remixicon/fonts/remixicon.css'
+import "remixicon/fonts/remixicon.css";
 import AppContext from "./context/AppContext.jsx";
-import ErrorBoundary from './components/ErrorBoundary.jsx';
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import Loader from "./components/Loader.jsx";
-import NotFound from './components/NotFound.jsx';
-import './index.css'
-import App from './App.jsx'
+import NotFound from "./components/NotFound.jsx";
+import "./index.css";
+import App from "./App.jsx";
 
-const Home = lazy(() => import('./pages/Home.jsx'));
-const Login = lazy(() => import('./pages/Login.jsx'));
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Login = lazy(() => import("./pages/Login.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -26,24 +26,24 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "/login",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Login />
-          </Suspense>
-        ),
-      }
     ],
-  }
-])
+  },
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Login />
+      </Suspense>
+    ),
+  },
+]);
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppContext>
       <ErrorBoundary>
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
       </ErrorBoundary>
     </AppContext>
-  </StrictMode>,
-)
+  </StrictMode>
+);

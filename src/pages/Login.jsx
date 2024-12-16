@@ -1,9 +1,94 @@
-import React from 'react'
+import React, { useRef, useState } from "react";
+import ThemeChanger from '../components/ThemeChanger.jsx'
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
 
-export default Login
+  const { contextSafe } = useGSAP();
+  const [showPassword, setShowPassword] = useState(false);
+  const formRef = useRef();
+  const [ userCredentials, setUserCredentials ] = useState({
+    email: "",
+    password: "",
+    role: "user"
+  });
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(userCredentials);
+  }
+
+  useGSAP(() => {
+    gsap.from(formRef.current, {
+      y: 200,
+      opacity: 0, 
+      duration: 1 
+    });
+  }, [contextSafe]);
+  
+  return (
+    <div className="w-full h-full min-h-screen flex justify-center items-center flex-col overflow-hidden px-2">
+        <form 
+          className="w-full xs:w-[80%] sm:w-[65%] md:w-[55%] lg:w-[35%] xl:w-[20%] flex justify-center items-center flex-col gap-8 rounded-3xl shadow-2xl py-8 px-4"
+          ref={formRef}
+          onSubmit={handleLogin}
+        >
+          <h1 className="text-4xl font-bold">Login</h1>
+          <label className="input input-bordered flex items-center gap-2 w-[97%] xs:w-11/12">
+            Email
+            <input
+              type="email"
+              className="w-full"
+              placeholder="example@example.com"
+              value={userCredentials.email}
+              onChange={(e) => setUserCredentials({...userCredentials, email: e.target.value})}
+              required
+            />
+          </label>
+          <label className="input input-bordered flex items-center gap-2 w-[97%] xs:w-11/12">
+            Password
+            <input
+              type={`${showPassword ? "text" : "password"}`}
+              className="w-full"
+              placeholder="password"
+              value={userCredentials.password}
+              onChange={(e) => setUserCredentials({...userCredentials, password: e.target.value})}
+              required
+            />
+            <i
+              className={` ${showPassword ? "ri-eye-off-line" : "ri-eye-line"}`}
+              onClick={() => setShowPassword(!showPassword)}
+            ></i>
+          </label>
+          <div className="w-[97%] xs:w-11/12 flex justify-evenly items-center gap-8">
+            <label className="label cursor-pointer flex gap-4">
+              <span className="label-text">User</span>
+              <input
+                type="radio"
+                name="role"
+                value={"user"}
+                onChange={(e) => setUserCredentials({...userCredentials, role: e.target.value})}
+                className="radio checked:bg-blue-500"
+                defaultChecked
+              />
+            </label>
+            <label className="label cursor-pointer flex gap-4">
+              <span className="label-text">Captain</span>
+              <input
+                type="radio"
+                name="role"
+                value={"captain"}
+                onChange={(e) => setUserCredentials({...userCredentials, role: e.target.value})}
+                className="radio checked:bg-blue-500"
+              />
+            </label>
+          </div>
+          <button type="submit" className="w-11/12 md:w-9/12 btn btn-neutral rounded-3xl shadow-2xl">Login</button>
+        </form>
+        <ThemeChanger position='fixed bottom-4 right-4'/>
+    </div>
+  );
+};
+
+export default Login;
