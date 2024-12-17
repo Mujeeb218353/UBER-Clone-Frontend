@@ -1,22 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "../context/ThemeProvider.jsx";
 
 const ThemeChanger = ({ position }) => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("my-theme") === "sunset"
-  );
-
-  const toggleTheme = () => {
-    const newTheme = isDarkMode ? "light" : "sunset";
-    localStorage.setItem("my-theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    setIsDarkMode(!isDarkMode);
-  };
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("my-theme") || "light";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-    setIsDarkMode(savedTheme === "sunset");
-  }, []);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <div className={`${position}`}>
@@ -24,7 +10,7 @@ const ThemeChanger = ({ position }) => {
         <label className="swap swap-rotate btn btn-sm btn-circle bg-transparent border-none">
           <input
             type="checkbox"
-            checked={isDarkMode}
+            checked={theme === "sunset"}
             onChange={toggleTheme}
           />
           {/* Sun Icon */}
