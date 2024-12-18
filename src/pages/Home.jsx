@@ -98,7 +98,7 @@ const Home = () => {
           </h2>
         <Link to="/login" className="btn btn-neutral rounded-3xl opacity-0 shadow-2xl" ref={btnRef}>
           Continue
-          <i class="ri-arrow-right-line"></i>
+          <i className="ri-arrow-right-line"></i>
         </Link>
       </div>
     </div>

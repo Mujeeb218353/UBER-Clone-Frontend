@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import ThemeChanger from '../components/ThemeChanger.jsx'
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
@@ -85,8 +85,9 @@ const Login = () => {
             </label>
           </div>
           <button type="submit" className="w-11/12 md:w-9/12 btn btn-neutral rounded-3xl shadow-2xl">Login</button>
+          <p className="">Don’t have an account yet ? <Link to={"/users/signup"} className="link">Sign Up</Link>
+          </p>
         </form>
-        <ThemeChanger position='fixed bottom-4 right-4'/>
     </div>
   );
 };
