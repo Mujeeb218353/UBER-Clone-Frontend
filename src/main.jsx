@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, StrictMode, Suspense } from "react";
 import "remixicon/fonts/remixicon.css";
 import AppContext from "./context/AppContext.jsx";
+import ThemeProvider from "./context/ThemeProvider.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import Loader from "./components/Loader.jsx";
 import NotFound from "./components/NotFound.jsx";
@@ -12,6 +13,14 @@ import App from "./App.jsx";
 const Home = lazy(() => import("./pages/Home.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 
+const UsersLayout = lazy(() => import("./Layouts/UsersLayout.jsx"));
+const UsersPage = lazy(() => import("./pages/UsersPage.jsx"));
+const UserSignUp = lazy(() => import("./pages/UserSignUp.jsx"));
+
+const CaptainsLayout = lazy(() => import("./Layouts/CaptainsLayout.jsx"));
+const CaptainsPage = lazy(() => import("./pages/CaptainsPage.jsx"));
+const CaptainSignUp = lazy(() => import("./pages/CaptainSignUp.jsx"));
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,30 +29,54 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Home />
-          </Suspense>
-        ),
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
     ],
   },
   {
-    path: "/login",
-    element: (
-      <Suspense fallback={<Loader />}>
-        <Login />
-      </Suspense>
-    ),
+    path: "users",
+    element: <UsersLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersPage />,
+      },
+      {
+        path: "signup",
+        element: <UserSignUp />,
+      },
+    ],
+  },
+  {
+    path: "captains",
+    element: <CaptainsLayout />,
+    children: [
+      {
+        path: "",
+        element: <CaptainsPage />,
+      },
+      {
+        path: "signup",
+        element: <CaptainSignUp />,
+      },
+    ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppContext>
-      <ErrorBoundary>
-        <RouterProvider router={router} />
-      </ErrorBoundary>
+      <ThemeProvider>
+        <ErrorBoundary>
+          <Suspense fallback={<Loader />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </ErrorBoundary>
+      </ThemeProvider>
     </AppContext>
   </StrictMode>
 );

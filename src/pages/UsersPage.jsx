@@ -1,11 +1,13 @@
+import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-const UserLayout = () => {
+const Users = () => {
   return (
     <div className='' >
-        <Outlet/>
+      Users
+      <Outlet/>
     </div>
   )
 }
 
-export default UserLayout
+export default Users
