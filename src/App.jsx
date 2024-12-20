@@ -4,7 +4,7 @@ import ThemeChanger from './components/ThemeChanger.jsx'
 
 const App = () => {
   return (
-   <div className='min-h-screen w-full h-screen flex justify-center items-center p-4'>
+   <div className='min-h-screen w-full h-screen flex justify-center items-center'>
      <Outlet/>
      <ThemeChanger position='fixed bottom-4 right-4'/>
    </div>

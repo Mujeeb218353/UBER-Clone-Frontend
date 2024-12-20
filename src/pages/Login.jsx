@@ -30,7 +30,7 @@ const Login = () => {
   return (
     <div className="w-full h-full min-h-screen flex justify-center items-center flex-col overflow-hidden px-2">
         <form 
-          className="w-full xs:w-[80%] sm:w-[65%] md:w-[55%] lg:w-[35%] xl:w-[20%] flex justify-center items-center flex-col gap-8 rounded-3xl shadow-2xl py-8 px-4"
+          className="w-full xs:w-[80%] sm:w-[65%] md:w-[55%] lg:w-[35%] xl:w-[20%] flex justify-center items-center flex-col gap-8 md:rounded-3xl md:shadow-2xl py-8 px-4"
           ref={formRef}
           onSubmit={handleLogin}
         >
@@ -85,7 +85,7 @@ const Login = () => {
             </label>
           </div>
           <button type="submit" className="w-11/12 md:w-9/12 btn btn-neutral rounded-3xl shadow-2xl">Login</button>
-          <p className="">Don’t have an account yet ? <Link to={"/users/signup"} className="link">Sign Up</Link>
+          <p className="text-center">Don’t have an account yet ? <Link to={"/users/signup"} className="link">Sign Up</Link>
           </p>
         </form>
     </div>
