@@ -1,12 +1,11 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, StrictMode, Suspense } from "react";
-import "remixicon/fonts/remixicon.css";
-import AppContext from "./context/AppContext.jsx";
-import ThemeProvider from "./context/ThemeProvider.jsx";
+import GlobalProvider from "./context/GlobalContext.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import Loader from "./components/Loader.jsx";
 import NotFound from "./components/NotFound.jsx";
+import "remixicon/fonts/remixicon.css";
 import "./index.css";
 import App from "./App.jsx";
 
@@ -69,14 +68,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AppContext>
-      <ThemeProvider>
+    <GlobalProvider>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <RouterProvider router={router} />
           </Suspense>
         </ErrorBoundary>
-      </ThemeProvider>
-    </AppContext>
+    </GlobalProvider>
   </StrictMode>
 );
