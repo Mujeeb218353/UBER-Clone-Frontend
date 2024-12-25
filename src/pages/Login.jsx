@@ -1,8 +1,9 @@
 import React, { useRef, useState, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 import { FormStateContext } from "../context/FormStateContext.jsx";
+import Alert from "../components/Alert.jsx";
 
 const Login = () => {
   const { formState, updateFormState, resetFormState } = useContext(FormStateContext);
@@ -15,13 +16,20 @@ const Login = () => {
     role: "user",
   });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    updateFormState({ isLoading: true, isSuccess: false, isError: false, errorMessage: "", successMessage: "" });
-    console.log(userCredentials);
+    updateFormState({ isLoading: true, isSuccess: false, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
     setTimeout(() => {
-      updateFormState({ isLoading: false, isSuccess: true, isError: false, errorMessage: "", successMessage: "Logged In Successfully" });
+      setUserCredentials({ email: "", password: "", role: "user" });
+      resetFormState();
     }, 2000);
+    try{
+    console.log(userCredentials);
+    updateFormState({ isLoading: false, isSuccess: true, isError: false, successMessage: "Logged In Successfully" });
+    }catch(err){
+      console.log(err);
+      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: err.message });
+    }
   };
 
   useGSAP(() => {
@@ -40,6 +48,7 @@ const Login = () => {
         onSubmit={handleLogin}
       >
         <h1 className="text-4xl font-bold">Login</h1>
+        <Alert />
         <label className="input input-bordered flex items-center gap-2 w-[97%] xs:w-11/12">
           Email
           <input
@@ -66,6 +75,7 @@ const Login = () => {
                 password: e.target.value,
               })
             }
+            minLength={8}
             required
           />
           <i
