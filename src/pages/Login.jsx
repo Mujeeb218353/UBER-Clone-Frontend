@@ -128,6 +128,13 @@ const Login = () => {
             Sign Up
           </Link>
         </p>
+        <p className="text-center">
+          Forgot Password ?
+          <Link to={"/forgot_pass"} className="link">
+            {" "}
+            Reset Password
+          </Link>
+        </p>
       </form>
     </div>
   );

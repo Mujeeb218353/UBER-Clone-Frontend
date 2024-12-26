@@ -11,6 +11,7 @@ import App from "./App.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword.jsx"));
 
 const UsersLayout = lazy(() => import("./Layouts/UsersLayout.jsx"));
 const UsersPage = lazy(() => import("./pages/UsersPage.jsx"));
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
+      {
+        path: "forgot_pass",
+        element: <ForgotPassword />
+      }
     ],
   },
   {
