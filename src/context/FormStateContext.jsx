@@ -5,6 +5,7 @@ export const FormStateContext = createContext();
 const FormStateProvider = ({ children }) => {
 
   const [formState, setFormState] = useState({
+    data: {},
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -18,6 +19,7 @@ const FormStateProvider = ({ children }) => {
 
   const resetFormState = () => {
     setFormState({
+      data: {},
       isLoading: false,
       isSuccess: false,
       isError: false,
