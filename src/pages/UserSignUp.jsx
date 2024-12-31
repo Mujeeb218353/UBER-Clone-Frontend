@@ -1,10 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Link } from "react-router-dom";
+import { FormStateContext } from "../context/FormStateContext.jsx";
+import Alert from "../components/Alert.jsx";
 
 const UserSignUpPage = () => {
   const { contextSafe } = useGSAP();
+  const { formState, updateFormState, resetFormState } = useContext(FormStateContext);
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
@@ -23,9 +26,24 @@ const UserSignUpPage = () => {
     role: "user",
   });
 
-  const handleSignUp = (e) => {
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    console.log(userCredentials);
+    if (userCredentials.password !== userCredentials.confirmPassword) {
+      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: "Passwords do not match" });
+      return;
+    }
+    try {
+      updateFormState({ isLoading: true, isSuccess: false, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
+      setTimeout(() => {
+        updateFormState({ isLoading: false, isSuccess: true, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
+        console.log(userCredentials);
+        resetFormState();
+      }, 2000)
+    } catch (error) {
+      console.log(error);
+      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: error.message });
+    }
   };
 
   useGSAP(() => {
@@ -44,6 +62,7 @@ const UserSignUpPage = () => {
         onSubmit={handleSignUp}
       >
         <h1 className="text-3xl font-bold">Sign Up</h1>
+        <Alert />
         <label className="form-control w-[97%] xs:w-11/12">
           <div className="label">
             <span className="label-text">First Name</span>
@@ -144,7 +163,7 @@ const UserSignUpPage = () => {
             <input
               type={`${showPassword.password ? "text" : "password"}`}
               className=""
-              placeholder="password"
+              placeholder="Password"
               value={userCredentials.password}
               onChange={(e) =>
                 setUserCredentials({
@@ -152,6 +171,7 @@ const UserSignUpPage = () => {
                   password: e.target.value,
                 })
               }
+              minLength={8}
               required
             />
             <i
@@ -175,7 +195,7 @@ const UserSignUpPage = () => {
             <input
               type={`${showPassword.confirmPassword ? "text" : "password"}`}
               className=""
-              placeholder="password"
+              placeholder="Confirm Password"
               value={userCredentials.confirmPassword}
               onChange={(e) =>
                 setUserCredentials({
@@ -183,6 +203,7 @@ const UserSignUpPage = () => {
                   confirmPassword: e.target.value,
                 })
               }
+              minLength={8}
               required
             />
             <i
@@ -201,8 +222,13 @@ const UserSignUpPage = () => {
         <button
           type="submit"
           className="w-11/12 md:w-9/12 btn btn-neutral rounded-3xl shadow-2xl my-4"
+          disabled={formState.isLoading}
         >
-          Sign UP
+          {formState.isLoading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            "Sign UP"
+          )}
         </button>
         <p className="text-center">
           Already have an account?{" "}
