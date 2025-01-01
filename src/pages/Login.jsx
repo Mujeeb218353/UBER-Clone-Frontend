@@ -1,7 +1,7 @@
 import React, { useRef, useState, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { data, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormStateContext } from "../context/FormStateContext.jsx";
 import Alert from "../components/Alert.jsx";
 
