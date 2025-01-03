@@ -57,7 +57,7 @@ const UserSignUpPage = () => {
   return (
     <div className="w-full h-full min-h-screen flex justify-center items-center flex-col overflow-hidden px-2">
       <form
-        className="w-full xs:w-[90%] sm:w-[85%] md:w-[65%] lg:w-[45%] xl:w-[30%] flex justify-center items-center flex-col gap-1 md:rounded-3xl md:shadow-2xl md:py-8 px-4"
+        className="w-full xs:w-[90%] sm:w-[85%] md:w-[65%] lg:w-[45%] xl:w-[30%] flex justify-center items-center flex-col gap-4 md:rounded-3xl md:shadow-2xl py-8 px-4"
         ref={formRef}
         onSubmit={handleSignUp}
       >
