@@ -1,13 +1,19 @@
 import React, { useRef, useState, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FormStateContext } from "../context/FormStateContext.jsx";
+import { UserContext } from "../context/UserContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
 import Alert from "../components/Alert.jsx";
+import axios from "axios";
 
 const UserSignUpPage = () => {
   const { contextSafe } = useGSAP();
+  const navigate = useNavigate();
   const { formState, updateFormState, resetFormState } = useContext(FormStateContext);
+  const { updateUserData } = useContext(UserContext);
+  const { login } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
@@ -26,23 +32,92 @@ const UserSignUpPage = () => {
     role: "user",
   });
 
-
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+    const { fullName, profile, phoneNumber, email, password } = userCredentials;
+
     if (userCredentials.password !== userCredentials.confirmPassword) {
-      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: "Passwords do not match" });
+      updateFormState({
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Passwords do not match",
+      });
       return;
     }
+
+    if (
+      !fullName?.firstName ||
+      !fullName?.lastName ||
+      !email ||
+      !password ||
+      !phoneNumber ||
+      !profile
+    ) {
+      return updateFormState({
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "All fields are required, including the profile picture.",
+      });
+    }
+
+    const formData = new FormData();
+    formData.append("fullName[firstName]", userCredentials.fullName.firstName);
+    formData.append("fullName[lastName]", userCredentials.fullName.lastName);
+    formData.append("profile", userCredentials.profile);
+    formData.append("phoneNumber", userCredentials.phoneNumber);
+    formData.append("email", userCredentials.email);
+    formData.append("password", userCredentials.password);
+
     try {
-      updateFormState({ isLoading: true, isSuccess: false, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
-      setTimeout(() => {
-        updateFormState({ isLoading: false, isSuccess: true, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
-        console.log(userCredentials);
-        resetFormState();
-      }, 2000)
+      updateFormState({
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        errorMessage: "",
+        successMessage: "",
+      });
+      const { data } = await axios.post(
+        "http://localhost:8080/api/users/register",
+        formData
+      );
+      updateUserData(data.data);
+      login(data.data);
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+      updateFormState({
+        isLoading: false,
+        isSuccess: true,
+        isError: false,
+        successMessage: "Signed up successfully!",
+      });
+      resetFormState();
+      setUserCredentials({
+        fullName: {
+          firstName: "",
+          lastName: "",
+        },
+        profile: "",
+        phoneNumber: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "user",
+      });
+      navigate("/users")
     } catch (error) {
-      console.log(error);
-      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: error.message });
+      console.error("Sign-up Error:", error);
+      updateFormState({
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage:
+          error?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      });
+      setTimeout(resetFormState, 3000);
     }
   };
 

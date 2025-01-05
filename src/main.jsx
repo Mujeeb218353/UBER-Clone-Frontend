@@ -8,6 +8,7 @@ import NotFound from "./components/NotFound.jsx";
 import "remixicon/fonts/remixicon.css";
 import "./index.css";
 import App from "./App.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
@@ -47,7 +48,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <UsersPage />,
+        element: (
+          <ProtectedRoute>
+            <UsersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "signup",
@@ -61,7 +66,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <CaptainsPage />,
+        element: (
+          <ProtectedRoute>
+            <CaptainsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "signup",
