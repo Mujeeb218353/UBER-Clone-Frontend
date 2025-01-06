@@ -38,8 +38,8 @@ const router = createBrowserRouter([
       },
       {
         path: "forgot_pass",
-        element: <ForgotPassword />
-      }
+        element: <ForgotPassword />,
+      },
     ],
   },
   {
@@ -83,11 +83,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GlobalProvider>
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
-            <RouterProvider router={router} />
-          </Suspense>
-        </ErrorBoundary>
+      <ErrorBoundary>
+        <Suspense fallback={<Loader />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </ErrorBoundary>
     </GlobalProvider>
   </StrictMode>
 );

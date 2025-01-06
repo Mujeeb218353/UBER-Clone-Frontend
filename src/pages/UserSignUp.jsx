@@ -11,7 +11,8 @@ import axios from "axios";
 const UserSignUpPage = () => {
   const { contextSafe } = useGSAP();
   const navigate = useNavigate();
-  const { formState, updateFormState, resetFormState } = useContext(FormStateContext);
+  const { formState, updateFormState, resetFormState } =
+    useContext(FormStateContext);
   const { updateUserData } = useContext(UserContext);
   const { login } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState({
@@ -79,34 +80,44 @@ const UserSignUpPage = () => {
         errorMessage: "",
         successMessage: "",
       });
+
       const { data } = await axios.post(
         "http://localhost:8080/api/users/register",
         formData
       );
+
       updateUserData(data.data);
-      login(data.data);
+
+      login(data.data, userCredentials.role);
+
       localStorage.setItem("accessToken", data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.refreshToken);
+
       updateFormState({
         isLoading: false,
         isSuccess: true,
         isError: false,
-        successMessage: "Signed up successfully!",
+        successMessage: "Signed Up Successfully!",
       });
-      resetFormState();
-      setUserCredentials({
-        fullName: {
-          firstName: "",
-          lastName: "",
-        },
-        profile: "",
-        phoneNumber: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "user",
-      });
-      navigate("/users")
+
+      setTimeout(() => {
+        resetFormState();
+
+        setUserCredentials({
+          fullName: {
+            firstName: "",
+            lastName: "",
+          },
+          profile: "",
+          phoneNumber: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          role: "user",
+        });
+
+        navigate("/users");
+      }, 1000);
     } catch (error) {
       console.error("Sign-up Error:", error);
       updateFormState({

@@ -1,15 +1,26 @@
 import React, { useRef, useState, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FormStateContext } from "../context/FormStateContext.jsx";
+import { UserContext } from "../context/UserContext.jsx";
+import { CaptainContext } from "../context/CaptainContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
 import Alert from "../components/Alert.jsx";
+import axios from "axios";
 
 const Login = () => {
   const { formState, updateFormState, resetFormState } = useContext(FormStateContext);
+  const { updateUserData } = useContext(UserContext);
+  const { updateCaptainData } = useContext(CaptainContext);
+  const { login } = useContext(AuthContext);
+
   const { contextSafe } = useGSAP();
-  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
   const formRef = useRef();
+
+  const [showPassword, setShowPassword] = useState(false);
   const [userCredentials, setUserCredentials] = useState({
     email: "",
     password: "",
@@ -17,18 +28,71 @@ const Login = () => {
   });
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
-    updateFormState({ isLoading: true, isSuccess: false, isError: false, errorMessage: "", successMessage: "", data: userCredentials });
-    setTimeout(() => {
-      setUserCredentials({ email: "", password: "", role: "user" });
-      resetFormState();
-    }, 2000);
-    try{
-    console.log(userCredentials);
-    updateFormState({ isLoading: false, isSuccess: true, isError: false, successMessage: "Logged In Successfully" });
-    }catch(err){
+
+    try {
+
+      updateFormState({
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        errorMessage: "",
+        successMessage: "",
+      });
+
+      console.log(userCredentials.email, userCredentials.password);
+      
+      
+      const { data } = await axios.post(
+        `http://localhost:8080/api/${userCredentials.role === "user" ? "users" : "captains"}/login`,
+        {
+          email: userCredentials.email,
+          password: userCredentials.password
+        },
+        {
+          withCredentials: true
+        }
+      );
+
+      if(userCredentials.role === "user"){
+        updateUserData(data.data)
+      }else if(userCredentials.role === "captain"){
+        updateCaptainData(data.data)
+      }
+
+      login(data.data, userCredentials.role);
+
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+
+      updateFormState({
+        isSuccess: true,
+        isError: false,
+        successMessage: "Logged In Successfully!",
+      });
+
+      setTimeout(()=>{
+
+        resetFormState()
+
+        setUserCredentials({
+          email: "",
+          password: "",
+        })
+  
+        navigate(`/${userCredentials.role}s`)
+
+      }, 1000)
+
+    } catch (err) {
       console.log(err);
-      updateFormState({ isLoading: false, isSuccess: false, isError: true, errorMessage: err.message });
+      updateFormState({
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: err.message,
+      });
     }
   };
 
