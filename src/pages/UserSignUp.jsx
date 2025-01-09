@@ -36,9 +36,9 @@ const UserSignUpPage = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const { fullName, profile, phoneNumber, email, password } = userCredentials;
+    const { fullName, profile, phoneNumber, email, password, confirmPassword } = userCredentials;
 
-    if (userCredentials.password !== userCredentials.confirmPassword) {
+    if (password !== confirmPassword) {
       updateFormState({
         isLoading: false,
         isSuccess: false,
@@ -56,12 +56,15 @@ const UserSignUpPage = () => {
       !phoneNumber ||
       !profile
     ) {
-      return updateFormState({
+      
+       updateFormState({
         isLoading: false,
         isSuccess: false,
         isError: true,
         errorMessage: "All fields are required, including the profile picture.",
       });
+
+      return;
     }
 
     const formData = new FormData();
