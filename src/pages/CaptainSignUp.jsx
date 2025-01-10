@@ -4,11 +4,18 @@ import gsap from "gsap";
 import { Link } from "react-router-dom";
 import { FormStateContext } from "../context/FormStateContext.jsx";
 import Alert from "../components/Alert.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { CaptainContext } from "../context/CaptainContext.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CaptainSignUpPage = () => {
   const { contextSafe } = useGSAP();
+  const navigate = useNavigate();
   const { formState, updateFormState, resetFormState } =
     useContext(FormStateContext);
+  const { updateCaptainData } = useContext(CaptainContext);
+  const { login } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
@@ -26,7 +33,7 @@ const CaptainSignUpPage = () => {
       color: "",
       plate: "",
       capacity: "",
-      vehicleType: "",
+      vehicleType: "car",
     },
     password: "",
     confirmPassword: "",
@@ -35,15 +42,67 @@ const CaptainSignUpPage = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (userCredentials.password !== userCredentials.confirmPassword) {
+
+    const {
+      fullName,
+      profile,
+      phoneNumber,
+      email,
+      password,
+      vehicle,
+      confirmPassword,
+      role
+    } = userCredentials;
+
+    if (password !== confirmPassword) {
       updateFormState({
         isLoading: false,
         isSuccess: false,
         isError: true,
         errorMessage: "Passwords do not match",
       });
+
       return;
     }
+
+    if (
+      !fullName?.firstName ||
+      !fullName?.lastName ||
+      !email ||
+      !password ||
+      !phoneNumber ||
+      !profile ||
+      !vehicle?.color ||
+      !vehicle?.plate ||
+      !vehicle?.capacity ||
+      !vehicle?.vehicleType
+    ) {
+      updateFormState({
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "All fields are required, including the profile picture.",
+      });
+
+      return;
+    }
+
+
+    const formData = new FormData();
+    formData.append("fullName[firstName]", userCredentials.fullName.firstName);
+    formData.append("fullName[lastName]", userCredentials.fullName.lastName);
+    formData.append("profile", userCredentials.profile);
+    formData.append("phoneNumber", userCredentials.phoneNumber);
+    formData.append("email", userCredentials.email);
+    formData.append("password", userCredentials.password);
+    formData.append("vehicle[color]", userCredentials.vehicle.color);
+    formData.append("vehicle[plate]", userCredentials.vehicle.plate);
+    formData.append("vehicle[capacity]", userCredentials.vehicle.capacity);
+    formData.append(
+      "vehicle[vehicleType]",
+      userCredentials.vehicle.vehicleType
+    );
+
     try {
       updateFormState({
         isLoading: true,
@@ -51,27 +110,60 @@ const CaptainSignUpPage = () => {
         isError: false,
         errorMessage: "",
         successMessage: "",
-        data: userCredentials,
       });
+
+      const { data } = await axios.post(
+        "http://localhost:8080/api/captains/register",
+        formData
+      );
+
+      updateCaptainData(data.data);
+
+      login(data.data, role);
+
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+
+      updateFormState({
+        isLoading: false,
+        isSuccess: true,
+        isError: false,
+        successMessage: "Signed Up Successfully!",
+      });
+
       setTimeout(() => {
-        updateFormState({
-          isLoading: false,
-          isSuccess: true,
-          isError: false,
-          errorMessage: "",
-          successMessage: "",
-          data: userCredentials,
-        });
-        console.log(userCredentials);
+
         resetFormState();
-      }, 2000);
+
+        setUserCredentials({
+          fullName: {
+            firstName: "",
+            lastName: "",
+          },
+          profile: "",
+          phoneNumber: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          vehicle: {
+            color: "",
+            plate: "",
+            capacity: "",
+            vehicleType: "",
+          },
+          role: "captain",
+        });
+
+        navigate("/captains");
+
+      }, 1000);
     } catch (error) {
       console.log(error);
       updateFormState({
         isLoading: false,
         isSuccess: false,
         isError: true,
-        errorMessage: error.message,
+        errorMessage: error.response.data.message || "Something went wrong. Please try again.",
       });
     }
   };
@@ -254,19 +346,27 @@ const CaptainSignUpPage = () => {
           </div>
           <select
             className="select select-bordered w-full"
+            defaultValue="car"
             onChange={(e) =>
               setUserCredentials({
                 ...userCredentials,
-                vehicle: { 
-                  ...userCredentials.vehicle, 
-                  vehicleType: e.target.value 
+                vehicle: {
+                  ...userCredentials.vehicle,
+                  vehicleType: e.target.value,
                 },
               })
             }
+            required
           >
-            <option className="w-full" value={"car"}>Car</option>
-            <option className="w-full" value={"rikshaw"}>Rikshaw</option>
-            <option className="w-full" value={"motorcycle"}>Motor Cycle</option>
+            <option className="w-full" value={"car"}>
+              Car
+            </option>
+            <option className="w-full" value={"rikshaw"}>
+              Rikshaw
+            </option>
+            <option className="w-full" value={"motorcycle"}>
+              Motor Cycle
+            </option>
           </select>
         </label>
         <label className="form-control w-[97%] xs:w-11/12">
