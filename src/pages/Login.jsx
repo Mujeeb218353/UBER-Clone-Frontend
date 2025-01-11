@@ -91,7 +91,7 @@ const Login = () => {
         isLoading: false,
         isSuccess: false,
         isError: true,
-        errorMessage: err.message,
+        errorMessage: err.response.data.message,
       });
     }
   };

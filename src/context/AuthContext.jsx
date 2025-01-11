@@ -7,8 +7,8 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user" || "captain");
     const storedRole = localStorage.getItem("role");
+    const storedUser = localStorage.getItem(`${storedRole}`);
     if (storedUser && storedRole) {
       setUser(JSON.parse(storedUser));
       setRole(storedRole);
@@ -16,7 +16,6 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData, role) => {
-    // console.log("Auth Context Data: ",userData);
     setUser(userData);
     setRole(role);
     localStorage.setItem("role", role);
