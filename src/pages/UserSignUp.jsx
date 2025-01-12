@@ -36,7 +36,8 @@ const UserSignUpPage = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const { fullName, profile, phoneNumber, email, password, confirmPassword } = userCredentials;
+    const { fullName, profile, phoneNumber, email, password, confirmPassword } =
+      userCredentials;
 
     if (password !== confirmPassword) {
       updateFormState({
@@ -56,8 +57,7 @@ const UserSignUpPage = () => {
       !phoneNumber ||
       !profile
     ) {
-      
-       updateFormState({
+      updateFormState({
         isLoading: false,
         isSuccess: false,
         isError: true,
@@ -146,87 +146,94 @@ const UserSignUpPage = () => {
   return (
     <div className="w-full h-full min-h-screen flex justify-center items-center flex-col overflow-hidden px-2">
       <form
-        className="w-full xs:w-[90%] sm:w-[85%] md:w-[65%] lg:w-[45%] xl:w-[30%] flex justify-center items-center flex-col gap-4 md:rounded-3xl md:shadow-2xl py-8 px-4"
+        className="w-full lg:w-10/12 xl:w-9/12 flex justify-center items-center flex-col gap-4 py-8 px-4"
         ref={formRef}
         onSubmit={handleSignUp}
       >
         <h1 className="text-3xl font-bold">Sign Up</h1>
         <Alert />
-        <label className="form-control w-[97%] xs:w-11/12">
-          <div className="label">
-            <span className="label-text">First Name</span>
-          </div>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="John"
-            value={userCredentials.fullName.firstName}
-            onChange={(e) =>
-              setUserCredentials({
-                ...userCredentials,
-                fullName: {
-                  ...userCredentials.fullName,
-                  firstName: e.target.value,
-                },
-              })
-            }
-            required
-          />
-        </label>
-        <label className="form-control w-[97%] xs:w-11/12">
-          <div className="label">
-            <span className="label-text">Last Name</span>
-          </div>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Doe"
-            value={userCredentials.fullName.lastName}
-            onChange={(e) =>
-              setUserCredentials({
-                ...userCredentials,
-                fullName: {
-                  ...userCredentials.fullName,
-                  lastName: e.target.value,
-                },
-              })
-            }
-            required
-          />
-        </label>
-        <label className="form-control w-[97%] xs:w-11/12">
-          <div className="label">
-            <span className="label-text">Email</span>
-          </div>
-          <input
-            type="email"
-            className="input input-bordered w-full"
-            placeholder="example@example.com"
-            value={userCredentials.email}
-            onChange={(e) =>
-              setUserCredentials({ ...userCredentials, email: e.target.value })
-            }
-            required
-          />
-        </label>
-        <label className="form-control w-[97%] xs:w-11/12">
-          <div className="label">
-            <span className="label-text">Phone Number</span>
-          </div>
-          <input
-            type="tel"
-            className="input input-bordered w-full"
-            placeholder="921234567890"
-            value={userCredentials.phoneNumber}
-            onChange={(e) =>
-              setUserCredentials({
-                ...userCredentials,
-                phoneNumber: e.target.value,
-              })
-            }
-            required
-          />
-        </label>
+        <div className="w-[97%] xs:w-11/12 flex flex-col md:flex-row gap-4">
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">First Name</span>
+            </div>
+            <input
+              type="text"
+              className="input input-bordered"
+              placeholder="John"
+              value={userCredentials.fullName.firstName}
+              onChange={(e) =>
+                setUserCredentials({
+                  ...userCredentials,
+                  fullName: {
+                    ...userCredentials.fullName,
+                    firstName: e.target.value,
+                  },
+                })
+              }
+              required
+            />
+          </label>
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Last Name</span>
+            </div>
+            <input
+              type="text"
+              className="input input-bordered"
+              placeholder="Doe"
+              value={userCredentials.fullName.lastName}
+              onChange={(e) =>
+                setUserCredentials({
+                  ...userCredentials,
+                  fullName: {
+                    ...userCredentials.fullName,
+                    lastName: e.target.value,
+                  },
+                })
+              }
+              required
+            />
+          </label>
+        </div>
+        <div className="w-[97%] xs:w-11/12 flex flex-col md:flex-row gap-4">
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Email</span>
+            </div>
+            <input
+              type="email"
+              className="input input-bordered"
+              placeholder="example@example.com"
+              value={userCredentials.email}
+              onChange={(e) =>
+                setUserCredentials({
+                  ...userCredentials,
+                  email: e.target.value,
+                })
+              }
+              required
+            />
+          </label>
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Phone Number</span>
+            </div>
+            <input
+              type="tel"
+              className="input input-bordered"
+              placeholder="921234567890"
+              value={userCredentials.phoneNumber}
+              onChange={(e) =>
+                setUserCredentials({
+                  ...userCredentials,
+                  phoneNumber: e.target.value,
+                })
+              }
+              required
+            />
+          </label>
+        </div>
         <label className="form-control w-[97%] xs:w-11/12">
           <div className="label">
             <span className="label-text">Profile</span>
@@ -244,7 +251,8 @@ const UserSignUpPage = () => {
             required
           />
         </label>
-        <label className="form-control w-[97%] xs:w-11/12">
+        <div className="w-[97%] xs:w-11/12 flex flex-col md:flex-row gap-4">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Password</span>
           </div>
@@ -276,7 +284,7 @@ const UserSignUpPage = () => {
             ></i>
           </div>
         </label>
-        <label className="form-control w-[97%] xs:w-11/12">
+        <label className="form-control w-full">
           <div className="label">
             <span className="label-text">Confirm Password</span>
           </div>
@@ -308,9 +316,10 @@ const UserSignUpPage = () => {
             ></i>
           </div>
         </label>
+        </div>
         <button
           type="submit"
-          className="w-11/12 md:w-9/12 btn btn-neutral rounded-3xl shadow-2xl my-4"
+          className="w-[95%] xs:w-1/2 md:w-1/3 lg:w-4/12 xl:w-3/12 btn btn-neutral rounded-3xl shadow-2xl my-4"
           disabled={formState.isLoading}
         >
           {formState.isLoading ? (
