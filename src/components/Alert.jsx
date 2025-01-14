@@ -12,7 +12,7 @@ const Alert = () => {
           : formState.isSuccess
           ? "alert alert-success"
           : ""
-      }`}
+      } ${formState.isError || formState.isSuccess ? "w-full h-full" : "w-0 h-0"}`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
