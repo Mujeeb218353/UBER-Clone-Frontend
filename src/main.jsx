@@ -17,10 +17,12 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword.jsx"));
 const UsersLayout = lazy(() => import("./Layouts/UsersLayout.jsx"));
 const UsersPage = lazy(() => import("./pages/UsersPage.jsx"));
 const UserSignUp = lazy(() => import("./pages/UserSignUp.jsx"));
+const UserProfile = lazy(() => import("./pages/UserProfile.jsx"));
 
 const CaptainsLayout = lazy(() => import("./Layouts/CaptainsLayout.jsx"));
 const CaptainsPage = lazy(() => import("./pages/CaptainsPage.jsx"));
 const CaptainSignUp = lazy(() => import("./pages/CaptainSignUp.jsx"));
+const CaptainProfile = lazy(() => import("./pages/CaptainProfile.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,10 @@ const router = createBrowserRouter([
     element: <UsersLayout />,
     children: [
       {
+        path: "signup",
+        element: <UserSignUp />,
+      },
+      {
         path: "",
         element: (
           <ProtectedRoute>
@@ -55,15 +61,23 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "signup",
-        element: <UserSignUp />,
-      },
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
+      }
     ],
   },
   {
     path: "captains",
     element: <CaptainsLayout />,
     children: [
+      {
+        path: "signup",
+        element: <CaptainSignUp />,
+      },
       {
         path: "",
         element: (
@@ -73,9 +87,13 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "signup",
-        element: <CaptainSignUp />,
-      },
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <CaptainProfile />
+          </ProtectedRoute>
+        ),
+      }
     ],
   },
 ]);
