@@ -13,6 +13,7 @@ const Users = () => {
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef();
+  const locationSearchRef = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted: ", pickup, destination);
@@ -22,19 +23,19 @@ const Users = () => {
     if (panelOpen) {
       gsap.to(panelRef.current, {
         duration: 1,
-        height: "70%",
+        top: "10%",
       });
-    } else {
+    }else{
       gsap.to(panelRef.current, {
         duration: 1,
-        height: "0%",
+        top: "calc(100% - 18rem)",
       });
     }
   }, [contextSafe, panelOpen]);
 
   return (
-    <div className="min-h-screen w-full xl:w-9/12 flex items-center flex-col gap-8 relative">
-      <div className="w-full flex items-center justify-between px-4 pt-8">
+    <div className="h-screen w-full xl:w-9/12 flex items-center flex-col gap-8 relative overflow-hidden">
+      <div className="w-11/12 flex items-center justify-between p-5 absolute top-2 bg-base-100 rounded-full shadow-lg mx-8">
         <img className="w-16" src={UberLogo} alt="Uber Logo" />
         <Link to={`/users/profile`} className="flex items-center">
           <i className="ri-user-fill text-2xl"></i>
@@ -48,12 +49,15 @@ const Users = () => {
           alt=""
         />
       </div>
-      <div className="absolute bottom-0 w-full h-screen flex flex-col justify-end rounded-tl-2xl rounded-tr-2xl">
-        <div className="p-5 bg-white rounded-tl-2xl rounded-tr-2xl">
-          <h4 className="text-3xl font-semibold text-black my-3 flex justify-between items-center">
+      <div
+        className="bg-base-100 absolute w-11/12 h-screen flex flex-col gap-4 rounded-t-2xl"
+        ref={panelRef}
+      >
+        <div className="p-5 rounded-tl-2xl rounded-tr-2xl">
+          <h4 className="text-3xl font-semibold my-3 flex justify-between items-center">
             Find a Trip
             <i
-              className={`ri-arrow-down-s-line text-2xl btn btn-circle bg-[#d6d6d6] hover:bg-[#eee] border-0 text-black flex justify-center items-center ${
+              className={`ri-arrow-down-s-line text-2xl btn btn-circle border-0  flex justify-center items-center ${
                 panelOpen ? "inline" : "hidden"
               }`}
               onClick={() => setPanelOpen(false)}
@@ -65,11 +69,11 @@ const Users = () => {
               handleSubmit(e);
             }}
           >
-            <label className="w-full input input-bordered input-warning flex items-center gap-2 py-7 bg-[#eee] border-0">
-              <i className="ri-circle-line font-bold text-black"></i>
+            <label className="w-full input input-bordered flex items-center gap-2 py-7">
+              <i className="ri-circle-line font-bold"></i>
               <input
                 type="text"
-                className="w-11/12 text-black"
+                className="w-11/12"
                 placeholder="Add a pick-up location"
                 value={pickup}
                 onChange={(e) => setPickup(e.target.value)}
@@ -77,12 +81,12 @@ const Users = () => {
                 required
               />
             </label>
-            <div className="bg-black w-[3px] h-12 absolute top-10 left-[1.45rem] rounded-full"></div>
-            <label className="w-full input input-bordered input-warning flex items-center gap-2 py-7 bg-[#eee] border-0 ">
-              <i className="ri-square-line font-bold text-black"></i>
+            <div className={`w-[3px] h-12 absolute top-10 left-[1.45rem] rounded-full bg-base-content`}></div>
+            <label className="w-full input input-bordered flex items-center gap-2 py-7">
+              <i className="ri-square-line font-bold"></i>
               <input
                 type="text"
-                className="w-11/12 text-black"
+                className="w-11/12"
                 placeholder="Enter your destination"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
@@ -92,16 +96,13 @@ const Users = () => {
             </label>
             <button
               type="submit"
-              className="btn bg-[#eee] hover:bg-[#d6d6d6] border-0 font-semibold text-black rounded-lg"
+              className="btn font-semibold rounded-lg"
             >
               Search
             </button>
           </form>
         </div>
-        <div
-          className={` ${panelOpen ? "p-5" : "p-0"}`}
-          ref={panelRef}
-        >
+        <div className={`h-full p-5 ${panelOpen ? "block" : "hidden"}`} ref={locationSearchRef}>
           <LocationSearchPanel />
         </div>
       </div>
