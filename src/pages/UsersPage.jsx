@@ -35,11 +35,11 @@ const Users = () => {
 
   return (
     <div className="h-screen w-full xl:w-9/12 flex items-center flex-col gap-8 relative overflow-hidden">
-      <div className="w-11/12 flex items-center justify-between p-5 absolute top-2 bg-base-100 rounded-full shadow-lg mx-8">
+      <div className="w-11/12 flex items-center justify-between p-5 absolute top-2  rounded-full shadow-lg mx-8">
         <img className="w-16" src={UberLogo} alt="Uber Logo" />
         <Link to={`/users/profile`} className="flex items-center">
-          <i className="ri-user-fill text-2xl"></i>
-          <p className="">Profile</p>
+          <i className="ri-user-fill text-2xl text-black"></i>
+          <p className=" text-black">Profile</p>
         </Link>
       </div>
       <div className="h-full w-full">
