@@ -34,8 +34,8 @@ const Users = () => {
   }, [contextSafe, panelOpen]);
 
   return (
-    <div className="h-screen w-full xl:w-9/12 flex items-center flex-col gap-8 relative overflow-hidden">
-      <div className="w-11/12 flex items-center justify-between p-5 absolute top-2  rounded-full shadow-lg mx-8">
+    <div className="h-screen w-full flex items-center flex-col gap-8 relative overflow-hidden">
+      <div className="w-9/12 flex items-center justify-between p-5 absolute top-2  rounded-full shadow-lg mx-8">
         <img className="w-16" src={UberLogo} alt="Uber Logo" />
         <Link to={`/users/profile`} className="flex items-center">
           <i className="ri-user-fill text-2xl text-black"></i>
@@ -50,7 +50,7 @@ const Users = () => {
         />
       </div>
       <div
-        className="bg-base-100 absolute w-11/12 h-screen flex flex-col gap-4 rounded-t-2xl"
+        className="bg-base-100 absolute w-9/12 h-screen flex flex-col gap-4 rounded-t-2xl"
         ref={panelRef}
       >
         <div className="p-5 rounded-tl-2xl rounded-tr-2xl">
